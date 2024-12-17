@@ -1,0 +1,50 @@
+services:
+  postgresdb:
+    image: postgres:11
+    container_name: blog_db
+    restart: always
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=blog
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./api-rest-ezops/database/create.sql:/docker-entrypoint-initdb.d/create.sql
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  node-server:
+    image: matheusmello09/nodejs-api:latest
+    container_name: api_rest
+    environment:
+      - DB_USER=root  
+      - DB_PASSWORD=123456
+      - DB_HOST=postgresdb
+      - DB_NAME=blog
+      - API_PORT=4000
+    ports:
+      - "4000:4000"
+    command: ["node", "server/server.js"]
+    networks:
+      - app-network
+    depends_on:
+      - postgresdb
+
+  vue-app:
+    image: matheusmello09/vue-js:latest
+    container_name: vue-app
+    ports:
+      - "80:3000"
+    networks:
+      - app-network
+    depends_on:
+      - node-server
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
