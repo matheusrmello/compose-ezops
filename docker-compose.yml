@@ -18,6 +18,7 @@ services:
   node-server:
     image: matheusmello09/nodejs-api:latest
     container_name: api_rest
+    restart: always
     environment:
       - DB_USER=root  
       - DB_PASSWORD=123456
@@ -35,6 +36,7 @@ services:
   vue-app:
     image: matheusmello09/vue-js:latest
     container_name: vue-app
+    restart: always
     ports:
       - "80:3000"
     networks:
