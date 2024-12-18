@@ -28,14 +28,14 @@ spec:
         volumeMounts:
           - mountPath: /var/lib/postgresql/data
             name: postgresdata
-          - name: init-sql
-            mountPath: /docker-entrypoint-initdb.d
+          - mountPath: /docker-entrypoint-initdb.d
+            name: init-sql
       volume:
         - name: postgresdata
           persistentVolumeClaim:
             claimName: postgres-volume-claim
         - name: init-sql
-          hostPath::
+          hostPath:
             path: .api-rest-ezops/database/create.sql
             type: File
 ---
@@ -67,7 +67,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /data/postgresql
+    path: /mnt/data/postgresql
 ---
 apiVersion: v1
 kind: Service
@@ -79,5 +79,6 @@ spec:
   type: NodePort
   ports:
     - port: 5432
+      nodePort: 31550
   selector:
     app: postgresdb
