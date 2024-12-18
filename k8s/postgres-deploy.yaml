@@ -19,9 +19,12 @@ spec:
         ports:
         - containerPort: 5432
         resources:
+          requests:
+            memory: "800Mi"
+            cpu: "800Mi"
           limits:
-            memory: "512Mi"
-            cpu: "800m"
+            memory: "1000Mi"
+            cpu: "1000Mi"
         envFrom:
           - configMapRef:
               name: postgres-secret
