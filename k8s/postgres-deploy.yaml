@@ -30,14 +30,13 @@ spec:
             name: postgresdata
           - mountPath: /docker-entrypoint-initdb.d
             name: init-sql
-      volume:
+      volumes:
         - name: postgresdata
           persistentVolumeClaim:
             claimName: postgres-volume-claim
         - name: init-sql
-          hostPath:
-            path: .api-rest-ezops/database/create.sql
-            type: File
+          configMap:
+            name: postgres-init-sql
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
