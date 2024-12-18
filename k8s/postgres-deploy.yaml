@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresdb
+  template:
+    metadata:
+      labels:
+        app: postgresdb
+    spec:
+      containers:
+      - name: postgresdb
+        image: postgres:11
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5432
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "800m"
+        envFrom:
+          - configMapRef:
+              name: postgres-secret
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgresdata
+          - name: init-sql
+            mountPath: /docker-entrypoint-initdb.d
+      volume:
+        - name: postgresdata
+          persistentVolumeClaim:
+            claimName: postgres-volume-claim
+        - name: init-sql
+          hostPath::
+            path: .api-rest-ezops/database/create.sql
+            type: File
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-volume-claim
+  labels:
+    app: postgresdb
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-volume
+  labels:
+    type: local
+    app: postgresdb
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data/postgresql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresdb-service
+  labels:
+    app: postgresdb
+spec:
+  type: NodePort
+  ports:
+    - port: 5432
+  selector:
+    app: postgresdb

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-server
+spec:
+  selector:
+    matchLabels:
+      app: node-server
+  template:
+    metadata:
+      labels:
+        app: node-server
+    spec:
+      containers:
+      - name: node-server
+        image: matheusmello09/nodejs-api:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 4000
+        env:
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASSWORD
+          value: "123456"
+        - name: DB_HOST
+          value: "postgresdb-service"
+        - name: DB_NAME
+          value: "blog"
+        - name: API_PORT
+          value: "4000"
+        command: ["node", "server/server.js"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-server-service
+spec:
+  ports:
+  - port: 4000
+    targetPort: 4000
+  selector:
+    app: node-server
