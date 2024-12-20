@@ -14,10 +14,14 @@ spec:
       containers:
       - name: node-server
         image: matheusmello09/nodejs-api:latest
+        imagePullPolicy: Always
         resources:
-          limits:
+          requests:
             memory: "128Mi"
             cpu: "500m"
+          limits:
+            memory: "256Mi"
+            cpu: "800m"
         ports:
         - containerPort: 4000
         env:
@@ -36,10 +40,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: node-server-service
+  name: node-api-service
 spec:
-  ports:
-  - port: 4000
-    targetPort: 4000
   selector:
     app: node-server
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 4000
+    nodePort: 33080

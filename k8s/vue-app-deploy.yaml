@@ -19,16 +19,20 @@ spec:
             memory: "128Mi"
             cpu: "500m"
         ports:
-        - containerPort: 80
+        - containerPort: 3000
+        imagePullPolicy: Always
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: vue-app-service
 spec:
-  ports:
-  - port: 3000
-    targetPort: 80
   selector:
     app: vue-app
-  type: LoadBalancer
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+    nodePort: 30080
+
