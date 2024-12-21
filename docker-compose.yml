@@ -1,5 +1,5 @@
 services:
-  postgresdb:
+  postgres:
     image: postgres:11-alpine
     container_name: blog_db
     restart: always
@@ -30,7 +30,7 @@ services:
     networks:
       - app-network
     depends_on:
-      - postgresdb
+      - postgres
 
   vue-app:
     image: matheusmello09/vue-js:latest
