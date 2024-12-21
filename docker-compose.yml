@@ -1,12 +1,12 @@
 services:
   postgresdb:
-    image: postgres:11
+    image: postgres:11-alpine
     container_name: blog_db
     restart: always
     environment:
-      - POSTGRES_USER=${{ secrets.DB_USER }} 
-      - POSTGRES_PASSWORD=${{ secrets.DB_PASSWORD }}
-      - POSTGRES_DB=${{ secrets.DB_NAME }}
+      POSTGRES_USER: ${DB_USER} 
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
     volumes:
@@ -16,14 +16,14 @@ services:
       - app-network
 
   node-server:
-    image: matheusmello09/nodejs-api:latest
+    image: matheusmello09/nodejs-api
     container_name: api_rest
     restart: always
     environment:
-      - DB_USER=${{ secrets.DB_USER }}  
-      - DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-      - DB_HOST=postgresdb
-      - DB_NAME=${{ secrets.DB_NAME }}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: postgresdb
+      DB_NAME: ${DB_NAME}
     ports:
       - "4000:4000"
     command: ["node", "server/server.js"]
