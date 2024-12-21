@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: postgresdb
-        image: postgres:11
+        image: matheusmello09/nodejs-api:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5432
