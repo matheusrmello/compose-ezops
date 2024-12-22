@@ -1,12 +1,12 @@
 services:
-  postgres:
-    image: postgres:11-alpine
+  postgresdb:
+    image: matheusmello09/postgres-with-schema:latest
     container_name: blog_db
     restart: always
-    environment:
-      POSTGRES_USER: ${DB_USER} 
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+    # environment:
+    #   POSTGRES_USER: ${DB_USER} 
+    #   POSTGRES_PASSWORD: ${DB_PASSWORD}
+    #   POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
     volumes:
@@ -30,7 +30,7 @@ services:
     networks:
       - app-network
     depends_on:
-      - postgres
+      - postgresdb
 
   vue-app:
     image: matheusmello09/vue-js:latest
