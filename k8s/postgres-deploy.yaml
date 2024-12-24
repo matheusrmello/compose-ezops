@@ -14,32 +14,32 @@ spec:
     spec:
       containers:
       - name: postgresdb
-        image: matheusmello09/nodejs-api:latest
+        image: matheusmello09/postgres-with-schema:latest
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5432
         resources:
           requests:
-            memory: "800Mi"
-            cpu: "800m"
+            memory: "256Mi"
+            cpu: "250m"
           limits:
-            memory: "1000Mi"
-            cpu: "1000m"
+            memory: "500Mi"
+            cpu: "500m"
         envFrom:
           - configMapRef:
               name: postgres-secret
         volumeMounts:
           - mountPath: /var/lib/postgresql/data
             name: postgresdata
-          - mountPath: /docker-entrypoint-initdb.d
-            name: init-sql
+          # - mountPath: /docker-entrypoint-initdb.d
+          #   name: init-sql
       volumes:
         - name: postgresdata
           persistentVolumeClaim:
             claimName: postgres-volume-claim
-        - name: init-sql
-          configMap:
-            name: postgres-init-sql
+        # - name: init-sql
+        #   configMap:
+        #     name: postgres-init-sql
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

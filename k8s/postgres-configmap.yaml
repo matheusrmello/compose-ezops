@@ -7,19 +7,19 @@ metadata:
 data:
   POSTGRES_DB: blog
   POSTGRES_USER: root
-  POSTGRES_PASSWORD: "123456"
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: postgres-init-sql
-data:
-  init.sql: |
-    CREATE SCHEMA IF NOT EXISTS blog;
+  POSTGRES_PASSWORD: "928BDeuE"
 
-    CREATE TABLE blog.post (
-      id SERIAL PRIMARY KEY,
-      title TEXT NOT NULL,
-      content TEXT NOT NULL,
-      date TIMESTAMP DEFAULT now()
-    );
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: postgres-init-sql
+# data:
+#   init.sql: |
+#     CREATE SCHEMA IF NOT EXISTS blog;
+
+#     CREATE TABLE blog.post (
+#       id SERIAL PRIMARY KEY,
+#       title TEXT NOT NULL,
+#       content TEXT NOT NULL,
+#       date TIMESTAMP DEFAULT now()
+#     );
