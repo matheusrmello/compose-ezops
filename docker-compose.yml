@@ -10,7 +10,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./api-rest-ezops/database/create.sql:/docker-entrypoint-initdb.d/create.sql
+      # - ./api-rest-ezops/database/create.sql:/docker-entrypoint-initdb.d/create.sql
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app-network
@@ -19,11 +19,12 @@ services:
     image: matheusmello09/nodejs-api
     container_name: api_node
     restart: always
+    env_file: ".env"
     environment:
-      DB_USER: "root"
-      DB_PASSWORD: "928BDeuE"
+      DB_USER: ${DB_USER} 
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_HOST: postgresdb
-      DB_NAME: "blog"
+      DB_NAME: ${DB_NAME}
     ports:
       - "4000:4000"
     command: ["node", "server/server.js"]
@@ -31,17 +32,6 @@ services:
       - app-network
     depends_on:
       - postgresdb
-
-  # vue-app:
-  #   image: matheusmello09/vue-js:latest
-  #   container_name: vue-app
-  #   restart: always
-  #   ports:
-  #     - "80:3000"
-  #   networks:
-  #     - app-network
-  #   depends_on:
-  #     - node-server
 
 networks:
   app-network:
