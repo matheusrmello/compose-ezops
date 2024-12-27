@@ -1,31 +1,29 @@
 services:
   postgresdb:
-    image: postgres:11
+    image: matheusmello09/postgres:latest
     container_name: postgresql
     restart: always
-    env_file: ".env"
     environment:
-      POSTGRES_USER: ${DB_USER} 
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 928BDeuE
+      POSTGRES_DB: blog
     ports:
       - "5432:5432"
     volumes:
-      - ./api-rest-ezops/database/create.sql:/docker-entrypoint-initdb.d/create.sql
+      # - ./matheus-api-rest-ezops/database/create.sql:/docker-entrypoint-initdb.d/create.sql
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app-network
 
   node-server:
-    image: matheusmello09/nodejs-api
+    image: matheusmello09/nodejs-api:latest
     container_name: api_node
     restart: always
-    env_file: ".env"
     environment:
-      DB_USER: ${DB_USER} 
-      DB_PASSWORD: ${DB_PASSWORD}
+      DB_USER: root
+      DB_PASSWORD: 928BDeuE
       DB_HOST: postgresdb
-      DB_NAME: ${DB_NAME}
+      DB_NAME: blog
     ports:
       - "4000:4000"
     command: ["node", "server/server.js"]
