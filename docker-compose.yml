@@ -1,16 +1,17 @@
 services:
   postgresdb:
-    image: matheusmello09/postgres-with-schema:latest
+    image: postgres:11
     container_name: postgresql
     restart: always
-    # environment:
-    #   POSTGRES_USER: ${DB_USER} 
-    #   POSTGRES_PASSWORD: ${DB_PASSWORD}
-    #   POSTGRES_DB: ${DB_NAME}
+    env_file: ".env"
+    environment:
+      POSTGRES_USER: ${DB_USER} 
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
     volumes:
-      # - ./api-rest-ezops/database/create.sql:/docker-entrypoint-initdb.d/create.sql
+      - ./api-rest-ezops/database/create.sql:/docker-entrypoint-initdb.d/create.sql
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app-network
